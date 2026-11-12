@@ -1,0 +1,56 @@
+{
+  "$schema": "https://www.getbifrost.ai/schema",
+  "client": {
+    "enforce_auth_on_inference": false
+  },
+  "governance": {
+    "routing_rules": [
+      {
+        "id": "bench-random",
+        "name": "bench-random",
+        "cel_expression": "model == \"bench-random\"",
+        "targets": [
+          {"provider": "upstream-a", "model": "bench-model", "weight": 0.7},
+          {"provider": "upstream-b", "model": "bench-model", "weight": 0.3}
+        ],
+        "sticky_sessions": false,
+        "scope": "global",
+        "priority": 0
+      },
+      {
+        "id": "bench-sticky",
+        "name": "bench-sticky",
+        "cel_expression": "model == \"bench-sticky\"",
+        "targets": [
+          {"provider": "upstream-a", "model": "bench-model", "weight": 0.7},
+          {"provider": "upstream-b", "model": "bench-model", "weight": 0.3}
+        ],
+        "sticky_sessions": true,
+        "scope": "global",
+        "priority": 1
+      }
+    ]
+  },
+  "providers": {
+    "upstream-a": {
+      "keys": [
+        {"name": "upstream-a-key", "value": "local-fake-key", "models": ["*"], "weight": 1.0}
+      ],
+      "network_config": {"base_url": "http://127.0.0.1:9101"},
+      "custom_provider_config": {
+        "base_provider_type": "openai",
+        "allowed_requests": {"chat_completion": true, "list_models": false}
+      }
+    },
+    "upstream-b": {
+      "keys": [
+        {"name": "upstream-b-key", "value": "local-fake-key", "models": ["*"], "weight": 1.0}
+      ],
+      "network_config": {"base_url": "http://127.0.0.1:9102"},
+      "custom_provider_config": {
+        "base_provider_type": "openai",
+        "allowed_requests": {"chat_completion": true, "list_models": false}
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+# Our Bifrost fork is its own git repository; teammates clone it separately (see README).
+/bifrost/
+
+# Gateway binary built from the fork
+/bin/
+
+# Bifrost writes databases and logs next to each config.json
+/bench/*/*.db
+/bench/*/*.db-shm
+/bench/*/*.db-wal
+/bench/*/logs/
+
+# Local secrets and noise
+.env
+.env.*
+.DS_Store
+__pycache__/

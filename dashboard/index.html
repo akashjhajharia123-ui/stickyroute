@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StickyRoute Results</title>
+<style>
+  :root {
+    --bg: #fbfaf7; --fg: #1c1b19; --muted: #6b6860; --line: #e4e1d8; --card: #ffffff;
+    --p0: #2f6fdf; --p1: #e0782f; --p2: #2f9e6b; --p3: #9b59b6; --err: #c0392b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151514; --fg: #ecebe6; --muted: #a09d94; --line: #2c2b28; --card: #1d1d1b;
+      --p0: #6c9cf0; --p1: #f0a062; --p2: #5cc492; --p3: #c08ad6; --err: #e57366;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151514; --fg: #ecebe6; --muted: #a09d94; --line: #2c2b28; --card: #1d1d1b;
+    --p0: #6c9cf0; --p1: #f0a062; --p2: #5cc492; --p3: #c08ad6; --err: #e57366;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1080px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 18px; margin: 36px 0 10px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 4px; }
+  input[type=text] { font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--fg); min-width: 220px; }
+  button { font: inherit; padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--fg); cursor: pointer; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .kpi .label { color: var(--muted); font-size: 13px; }
+  .kpi .value { font-size: 30px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .kpi .note { color: var(--muted); font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  th { font-size: 13px; color: var(--muted); font-weight: 600; }
+  tr:last-child td { border-bottom: 0; }
+  .tablewrap { overflow-x: auto; }
+  .grids { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .gridcard { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+  .gridcard h3 { margin: 0 0 2px; font-size: 15px; }
+  .gridcard p { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
+  .timeline { display: grid; gap: 2px; }
+  .row { display: grid; gap: 2px; }
+  .cell { height: 9px; border-radius: 2px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .msg { color: var(--muted); }
+  .error { color: var(--err); }
+  footer { margin-top: 40px; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>StickyRoute results</h1>
+  <p class="sub">Session-sticky weighted routing for Bifrost (maximhq/bifrost#5409). Every number below is read from a committed results file.</p>
+
+  <div class="controls">
+    <label for="run">Results file</label>
+    <input id="run" type="text" value="routing-proof">
+    <button id="load">Load</button>
+    <span id="status" class="msg" role="status"></span>
+  </div>
+
+  <section id="out" hidden>
+    <h2>Headline</h2>
+    <div class="kpis" id="kpis"></div>
+
+    <h2>By mode</h2>
+    <div class="tablewrap"><table id="table"></table></div>
+
+    <h2>Who served each turn</h2>
+    <p class="sub" id="gridnote"></p>
+    <div class="grids" id="grids"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <footer id="meta"></footer>
+</main>
+<script>
+const GRID_SESSIONS = 40;
+const COLORS = ["var(--p0)", "var(--p1)", "var(--p2)", "var(--p3)"];
+
+const fmt = (v, digits = 2) => v === null || v === undefined ? "n/a" : (typeof v === "number" ? v.toLocaleString(undefined, { maximumFractionDigits: digits }) : String(v));
+const pct = v => v === null || v === undefined ? "n/a" : (v * 100).toFixed(1) + "%";
+
+function el(tag, attrs = {}, text) {
+  const node = document.createElement(tag);
+  Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+function providerColors(data) {
+  const names = new Set();
+  data.modes.forEach(m => m.sessions.forEach(s => s.turns.forEach(t => t.provider && names.add(t.provider))));
+  const map = {};
+  [...names].sort().forEach((name, i) => { map[name] = COLORS[i % COLORS.length]; });
+  return map;
+}
+
+function renderKpis(data) {
+  const box = document.getElementById("kpis");
+  box.replaceChildren();
+  data.modes.forEach(m => {
+    const s = m.summary, total = m.sessions.length;
+    const card = el("div", { class: "kpi" });
+    card.append(el("div", { class: "label" }, `${m.mode}: conversations that switched provider`));
+    card.append(el("div", { class: "value" }, `${s.sessions_with_any_switch} / ${total}`));
+    card.append(el("div", { class: "note" }, `${fmt(s.provider_switches_per_session)} switches per conversation`));
+    box.append(card);
+  });
+}
+
+function renderTable(data) {
+  const table = document.getElementById("table");
+  table.replaceChildren();
+  const head = el("tr");
+  ["Mode", "Model", "Switches / conversation", "Conversations switched", "Split (first turn)", "Cached input", "Total cost", "p50 latency", "Errors"]
+    .forEach(h => head.append(el("th", { scope: "col" }, h)));
+  const thead = el("thead");
+  thead.append(head);
+  table.append(thead);
+  const body = table.appendChild(el("tbody"));
+  data.modes.forEach(m => {
+    const s = m.summary, row = el("tr");
+    const split = Object.entries(s.share_by_provider || {}).map(([p, v]) => `${p} ${pct(v)}`).join(", ");
+    [m.mode, m.model, fmt(s.provider_switches_per_session), `${s.sessions_with_any_switch} / ${m.sessions.length}`, split,
+     pct(s.cached_input_ratio), s.total_cost_usd === null ? "n/a" : "$" + fmt(s.total_cost_usd, 4),
+     s.p50_latency_ms === null ? "n/a" : fmt(s.p50_latency_ms, 0) + " ms", pct(s.error_rate)]
+      .forEach(v => row.append(el("td", {}, v)));
+    body.append(row);
+  });
+}
+
+function renderGrids(data, colors) {
+  const box = document.getElementById("grids");
+  box.replaceChildren();
+  const turns = data.workload.turns_per_session;
+  const shown = Math.min(GRID_SESSIONS, data.workload.sessions);
+  document.getElementById("gridnote").textContent =
+    `First ${shown} conversations of each mode. One row per conversation, one cell per turn (left to right), coloured by the provider that served it.`;
+  data.modes.forEach(m => {
+    const card = el("div", { class: "gridcard" });
+    card.append(el("h3", {}, m.mode));
+    card.append(el("p", {}, `${m.summary.sessions_with_any_switch} of ${m.sessions.length} conversations switched provider`));
+    const grid = el("div", { class: "timeline", role: "img", "aria-label": `${m.mode}: provider per turn for ${shown} conversations` });
+    m.sessions.slice(0, shown).forEach(s => {
+      const row = el("div", { class: "row" });
+      row.style.gridTemplateColumns = `repeat(${turns}, 1fr)`;
+      s.turns.forEach(t => {
+        const cell = el("div", { class: "cell", title: `${s.session_id} turn ${t.turn}: ${t.error ? "error" : t.provider}` });
+        cell.style.background = t.error ? "var(--err)" : (colors[t.provider] || "var(--muted)");
+        row.append(cell);
+      });
+      grid.append(row);
+    });
+    card.append(grid);
+    box.append(card);
+  });
+  const legend = document.getElementById("legend");
+  legend.replaceChildren();
+  Object.entries(colors).forEach(([name, color]) => {
+    const item = el("span");
+    const sw = el("span", { class: "sw" }); sw.style.background = color;
+    item.append(sw, document.createTextNode(name));
+    legend.append(item);
+  });
+}
+
+async function load() {
+  const name = document.getElementById("run").value.trim();
+  const status = document.getElementById("status");
+  if (!/^[\w.-]+$/.test(name)) { status.textContent = "Use letters, digits, dot, dash or underscore."; status.className = "error"; return; }
+  status.className = "msg"; status.textContent = "Loading…";
+  try {
+    const res = await fetch(`../bench/results/${name}.json`, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status} for bench/results/${name}.json`);
+    const data = await res.json();
+    const colors = providerColors(data);
+    renderKpis(data); renderTable(data); renderGrids(data, colors);
+    document.getElementById("out").hidden = false;
+    document.getElementById("meta").textContent =
+      `Run ${data.run} · ${data.created_at} · bifrost ${data.bifrost_commit ? data.bifrost_commit.slice(0, 10) : "unknown"} · ${data.workload.sessions} sessions × ${data.workload.turns_per_session} turns. ${data.note || ""}`;
+    status.textContent = "";
+    try { localStorage.setItem("stickyroute-run", name); } catch (e) { /* storage unavailable: fine */ }
+  } catch (err) {
+    status.className = "error";
+    status.textContent = `Could not load results: ${err.message}. Serve the repo root (python3 -m http.server) and open /dashboard/.`;
+  }
+}
+
+document.getElementById("load").addEventListener("click", load);
+document.getElementById("run").addEventListener("keydown", e => { if (e.key === "Enter") load(); });
+try { const saved = localStorage.getItem("stickyroute-run"); if (saved) document.getElementById("run").value = saved; } catch (e) { /* ignore */ }
+load();
+</script>
+</body>
+</html>
