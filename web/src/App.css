@@ -110,7 +110,9 @@ footer { background: rgba(11, 14, 22, 0.7); }
 /* the conversation grids lie back like glowing floors. Panels render flat (no depth sorting),
    otherwise the tilted grid would sink behind the panel's own background and disappear. */
 .panel.tilt3d { transform-style: flat; }
-.panel .grid { transform: perspective(900px) rotateX(18deg); transform-origin: 50% 100%; }
+.grid-stage { perspective: 1400px; perspective-origin: 50% 30%; }
+.panel .grid { transform: rotateX(14deg); transform-origin: 50% 100%; }
+.grid-note { color: var(--muted); font-size: 13px; margin-top: 10px; text-align: center; }
 .cell.a { box-shadow: 0 0 6px rgba(79, 141, 245, 0.55); }
 .cell.b { box-shadow: 0 0 6px rgba(240, 149, 79, 0.5); }
 
