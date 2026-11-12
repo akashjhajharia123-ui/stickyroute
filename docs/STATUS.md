@@ -14,7 +14,9 @@ Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
 - [x] Commented on #5409; draft PR https://github.com/maximhq/bifrost/pull/9908
 - [x] Review done: independent reviewer agent + CodeRabbit. Fixes in `594b5b6` (see B section)
 - [x] Routing proof on the real gateway: 974/1000 conversations switched today vs 0/1000 sticky
-- [x] Website with live simulator in `site/` (JS port matches Go on 8,000/8,000 picks), on branch `gh-pages`
+- [x] Website rebuilt in React with React Bits (3D Hyperspeed hero), source in `web/`, deployed to `gh-pages`
+      (JS port of the selection code matches Go on 8,000/8,000 picks: `node web/verify/check.mjs`).
+      To redeploy: `cd web && npm run build`, then replace the gh-pages branch contents with `web/dist/`.
 - [x] Website live: https://akashjhajharia123-ui.github.io/stickyroute/
 - [x] Replied to all 5 CodeRabbit comments on PR #9908 (4 fixed in `594b5b6`, harness case promised as follow-up)
 - [ ] Cache/cost benchmark with real providers (free route: Gemini + Groq keys needed)

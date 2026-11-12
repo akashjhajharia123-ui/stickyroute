@@ -27,6 +27,7 @@ what you did before you stop.
 | `bifrost/` | Our fork of maximhq/bifrost (its own git repo). The upstream change lives here. | A (core), B (tests) |
 | `bench/` | Benchmark harness: replays multi-turn sessions through Bifrost, writes results. | C |
 | `dashboard/` | Results page built from `bench/results/*.json`. | C |
+| `web/` | Public website (React + React Bits), live at https://akashjhajharia123-ui.github.io/stickyroute/ via the `gh-pages` branch. | A |
 | `docs/` | Brief, design, interfaces, decisions, status, pitch, judge Q&A. | D (anyone may edit their STATUS section) |
 
 ## Rules
