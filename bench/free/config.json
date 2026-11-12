@@ -1,0 +1,46 @@
+{
+  "$schema": "https://www.getbifrost.ai/schema",
+  "client": {
+    "enforce_auth_on_inference": false
+  },
+  "governance": {
+    "routing_rules": [
+      {
+        "id": "free-random",
+        "name": "free-random",
+        "cel_expression": "model == \"free-random\"",
+        "targets": [
+          {"provider": "gemini", "model": "gemini-3.1-flash-lite", "weight": 0.7},
+          {"provider": "gemini", "model": "gemini-3.1-flash-lite-preview", "weight": 0.3}
+        ],
+        "sticky_sessions": false,
+        "scope": "global",
+        "priority": 0
+      },
+      {
+        "id": "free-sticky",
+        "name": "free-sticky",
+        "cel_expression": "model == \"free-sticky\"",
+        "targets": [
+          {"provider": "gemini", "model": "gemini-3.1-flash-lite", "weight": 0.7},
+          {"provider": "gemini", "model": "gemini-3.1-flash-lite-preview", "weight": 0.3}
+        ],
+        "sticky_sessions": true,
+        "scope": "global",
+        "priority": 1
+      }
+    ]
+  },
+  "providers": {
+    "gemini": {
+      "keys": [
+        {"name": "gemini-key", "value": "env.GEMINI_API_KEY", "models": ["*"], "weight": 1.0}
+      ]
+    },
+    "groq": {
+      "keys": [
+        {"name": "groq-key", "value": "env.GROQ_API_KEY", "models": ["*"], "weight": 1.0}
+      ]
+    }
+  }
+}

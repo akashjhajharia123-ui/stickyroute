@@ -12,6 +12,7 @@ gateway does not report (cached tokens, cost) are written as null, never invente
 
 import argparse
 import json
+import random
 import statistics
 import subprocess
 import sys
@@ -74,17 +75,41 @@ def turn_record(turn: int, body: dict) -> dict:
     }
 
 
-def run_mode(base_url: str, model: str, sessions: int, turns: int, system_prompt: str, run: str, label: str) -> list[dict]:
+CONTEXT_WORDS = ("request", "router", "gateway", "budget", "session", "provider", "token", "cache", "latency",
+                 "fallback", "rule", "weight", "target", "model", "prompt", "handler", "store", "metric")
+
+
+def session_context(session_id: str, chars: int) -> str:
+    """A deterministic, session-unique document, like the repo or files an agent carries in its context.
+
+    Unique per session so a provider cannot serve it from a prefix cached for another session:
+    only a model that already saw THIS session's earlier turns can reuse its cache.
+    """
+    if chars <= 0:
+        return ""
+    rng = random.Random(session_id)
+    words: list[str] = []
+    size = 0
+    while size < chars:
+        word = f"{rng.choice(CONTEXT_WORDS)}{rng.randint(0, 9999)}"
+        words.append(word)
+        size += len(word) + 1
+    return f"\n\nContext for {session_id}:\n" + " ".join(words)
+
+
+def run_mode(base_url: str, model: str, sessions: int, turns: int, system_prompt: str, run: str, label: str,
+             delay_s: float = 0.0, context_chars: int = 0) -> list[dict]:
     """Run all sessions of one mode, interleaving turns across sessions like concurrent users."""
-    histories = {
-        f"{run}-{label}-{i:04d}": [{"role": "system", "content": system_prompt}] for i in range(sessions)
-    }
+    ids = [f"{run}-{label}-{i:04d}" for i in range(sessions)]
+    histories = {sid: [{"role": "system", "content": system_prompt + session_context(sid, context_chars)}] for sid in ids}
     records: dict[str, list[dict]] = {sid: [] for sid in histories}
     for turn in range(1, turns + 1):
         for session_id, history in histories.items():
             history.append({"role": "user", "content": f"Turn {turn}: continue the task for {session_id}."})
             body = post_chat(base_url, model, session_id, history)
             records[session_id].append(turn_record(turn, body))
+            if delay_s:
+                time.sleep(delay_s)  # stay inside free-tier rate limits
             reply = ((body.get("choices") or [{}])[0].get("message") or {}).get("content") or ""
             history.append({"role": "assistant", "content": reply})
         print(f"  {label}: turn {turn}/{turns} done", file=sys.stderr, flush=True)
@@ -99,13 +124,18 @@ def percentile(values: list[float], pct: float) -> float | None:
     return ordered[index]
 
 
+def route(turn: dict) -> str:
+    """Where a turn was served: provider AND model, since caches are per model too."""
+    return f'{turn["provider"]}/{turn["model"]}'
+
+
 def summarise(sessions: list[dict]) -> dict:
     turns = [t for s in sessions for t in s["turns"]]
     switches = []
     for s in sessions:
-        served = [t["provider"] for t in s["turns"] if t["error"] is None]
+        served = [route(t) for t in s["turns"] if t["error"] is None]
         switches.append(sum(1 for a, b in zip(served, served[1:]) if a != b))
-    first = [s["turns"][0]["provider"] for s in sessions if s["turns"] and s["turns"][0]["error"] is None]
+    first = [route(s["turns"][0]) for s in sessions if s["turns"] and s["turns"][0]["error"] is None]
     share = {p: round(first.count(p) / len(first), 4) for p in sorted(set(first))} if first else {}
     cached = [t for t in turns if t["cached_input_tokens"] is not None and t["input_tokens"]]
     costs = [t["cost_usd"] for t in turns if t["cost_usd"] is not None]
@@ -141,6 +171,9 @@ def main() -> None:
     parser.add_argument("--turns", type=int, default=10)
     parser.add_argument("--system-prompt", type=Path, default=DEFAULT_SYSTEM_PROMPT)
     parser.add_argument("--note", default="", help="free text saved with the results")
+    parser.add_argument("--delay", type=float, default=0.0, help="seconds to wait after each request (free-tier rate limits)")
+    parser.add_argument("--session-context", type=int, default=0, metavar="CHARS",
+                        help="add a unique per-session document of about CHARS characters to each session's system prompt")
     args = parser.parse_args()
 
     if args.sessions < 1 or args.turns < 2:
@@ -158,12 +191,14 @@ def main() -> None:
         "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "bifrost_commit": git_commit(BENCH_DIR.parent / "bifrost"),
         "note": args.note,
-        "workload": {"sessions": args.sessions, "turns_per_session": args.turns, "system_prompt_chars": len(system_prompt)},
+        "workload": {"sessions": args.sessions, "turns_per_session": args.turns, "system_prompt_chars": len(system_prompt),
+                     "session_context_chars": args.session_context, "delay_s": args.delay},
         "modes": [],
     }
     for label, model in modes:
         print(f"mode {label} (model {model})", file=sys.stderr)
-        sessions = run_mode(args.bifrost_url, model, args.sessions, args.turns, system_prompt, args.run, label)
+        sessions = run_mode(args.bifrost_url, model, args.sessions, args.turns, system_prompt, args.run, label,
+                            args.delay, args.session_context)
         results["modes"].append({"mode": label, "model": model, "sessions": sessions, "summary": summarise(sessions)})
 
     out = BENCH_DIR / "results" / f"{args.run}.json"
