@@ -3,6 +3,9 @@
 **Session-sticky weighted routing for the Bifrost AI gateway.**
 Geek Room Global AI Hackathon 2026, Bifrost track (Problem 04). Fixes maximhq/bifrost#5409.
 
+**Live demo:** https://akashjhajharia123-ui.github.io/stickyroute/ ·
+**Upstream PR:** https://github.com/maximhq/bifrost/pull/9908
+
 Bifrost's weighted routing rules (say 70% Claude, 30% GPT) pick a provider **per request**, so
 one conversation keeps jumping between providers: conversations break, prompt caches are thrown
 away, and Bifrost's own session affinity gets undone. StickyRoute adds one opt-in flag per rule,

@@ -3,58 +3,58 @@
 Each person edits **only their own section**. Update at the end of every session.
 Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
 
-## Overall (2026-11-12)
+## Overall (updated 2026-11-12, late)
 
 - [x] Research and track choice (see `DECISIONS.md`)
-- [x] Feature implemented and committed in `bifrost/` on branch `feat/sticky-weighted-targets` (commit `117b7b7`)
-- [x] Go tests: routing plugin, configstore, HTTP handlers all pass
+- [x] Feature implemented in `bifrost/` on `feat/sticky-weighted-targets` (commits `117b7b7` + review fixes `594b5b6`)
+- [x] Go tests: routing plugin (also with `-race`), configstore, HTTP handlers all pass
 - [x] UI: switch added; i18n check passes; UI build + typecheck 0 errors
-- [x] Fork pushed: https://github.com/akashjhajharia123-ui/bifrost/tree/feat/sticky-weighted-targets
-- [x] Team repo: https://github.com/akashjhajharia123-ui/stickyroute (add teammates as collaborators)
-- [x] Commented on #5409: https://github.com/maximhq/bifrost/issues/5409#issuecomment-6825112970
-- [x] Draft PR opened: https://github.com/maximhq/bifrost/pull/9908 (mark ready after B's review)
-- [x] Routing proof on the real gateway (no keys): 974/1000 conversations switched provider
-      today vs 0/1000 with sticky (`bench/results/routing-proof.json`)
-- [x] Dashboard (`dashboard/index.html`) renders the routing proof
-- [x] Drafts for D: `docs/PITCH.md`, `docs/DEMO_SCRIPT.md`, `docs/JUDGE_QA.md`, `docs/PR.md`
-- [ ] Benchmark with real providers (needs API keys in env vars; set model names in `bench/real/config.json`)
-- [ ] Dashboard view of the real-provider run
-- [ ] README, deck, demo video, judge Q&A
-- [ ] Upstream PR #9908 marked ready for review (after B's review)
+- [x] Fork: https://github.com/akashjhajharia123-ui/bifrost/tree/feat/sticky-weighted-targets
+- [x] Team repo: https://github.com/akashjhajharia123-ui/stickyroute (teammates invited)
+- [x] Commented on #5409; draft PR https://github.com/maximhq/bifrost/pull/9908
+- [x] Review done: independent reviewer agent + CodeRabbit. Fixes in `594b5b6` (see B section)
+- [x] Routing proof on the real gateway: 974/1000 conversations switched today vs 0/1000 sticky
+- [x] Website with live simulator in `site/` (JS port matches Go on 8,000/8,000 picks), on branch `gh-pages`
+- [ ] **Enable GitHub Pages** (human: repo Settings → Pages → branch `gh-pages`, folder `/`) → https://akashjhajharia123-ui.github.io/stickyroute/
+- [ ] Reply to CodeRabbit on PR #9908 (drafts ready; human approves posting)
+- [ ] Cache/cost benchmark with real providers (free route: Gemini + Groq keys needed)
+- [ ] Deck (cover done in the Slides artifact; to finish, then Canva), demo video
+- [ ] Mark PR #9908 "Ready for review"
 - [ ] Hackathon submission (human)
 
-## A: core (Claude)
+## A: core (Akash + Claude)
 
-Done: feature code (see `DESIGN.md` table).
-Next:
-- Run Bifrost locally with a sticky rule and send `x-bf-session-id` requests by hand; confirm
-  the routing log shows the sticky line and turns stay on one provider.
-- Check `tests/scripts/migration-checker` passes with the new column.
-- Run the broader suites touched: `make test-plugins`, configstore tests on Postgres if the
-  Makefile supports it.
+Done: feature, review fixes, docs, website, routing proof.
+Next: CodeRabbit replies (after approval), deck, real-provider benchmark once keys exist.
+Blocked / questions: GitHub Pages must be switched on by a human (auto-mode safety check).
+
+## B: tests and review (Rahul)
+
+Done by Akash's Claude (independent reviewer agent + CodeRabbit), fixed in `594b5b6`:
+- MEDIUM: NaN weight could win sticky selection. Fixed, test added.
+- MAJOR (CodeRabbit): honour `x-bf-session-affinity: off`. Fixed via `schemas.IsSessionAffinityActive`, test added.
+- MAJOR (CodeRabbit): scope sticky key per caller. Fixed via `bifrost.SessionStateKey(ctx, "sticky-route", ruleID)`, test added.
+- MAJOR (CodeRabbit): tests moved into `engine_test.go` and `frameworkconfighash_test.go`.
+- MEDIUM: docs gaps (OpenAPI YAML source, routing-rules page, config.json table). Fixed; `openapi.json` regenerated with `bundle.py`, identical.
+- MEDIUM: API round-trip test added (`TestRoutingRuleStickySessionsRoundTrip`).
+Open (deliberately not done yet):
+- CodeRabbit asks for a provider-harness case and the reviewer for a Playwright e2e test of the switch.
+  Both need the full harness/e2e stack to run; adding them unrun would be worse than not adding them.
+  Rahul: if you have time, try `make run-e2e-ui` for the routing-rules spec and add a toggle-and-persist case.
+- LOW: UI badge for sticky rules in the rule info sheet / tree view (optional).
 Blocked / questions: none.
 
-## B: tests and review (Claude)
+## C: benchmark and dashboard (Kanishk)
 
-Next:
-- Review commit `117b7b7` against `DESIGN.md` and `bifrost/AGENTS.md`; list issues in this section.
-- Add a test in `plugins/routing` (plugin level) proving a sticky rule plus core session
-  affinity keeps a session on one provider across turns, including after a fallback serves.
-- Add a UI test for the switch if the repo has tests for the chain_rule switch.
-- Draft the upstream PR description in `docs/PR.md`.
-Blocked / questions: none.
+Done: routing proof (`bench/results/routing-proof.json`), dashboard, website results section.
+Next: free cache benchmark (Gemini + Groq), see the prompt in chat / `bench/README.md` section 2.
+Blocked / questions: needs free API keys created by a human.
 
-## C: benchmark and dashboard (Claude)
-
-Next: see `bench/README.md`. Run the routing proof (no keys needed), then the cache/cost run
-with real keys. Commit results to `bench/results/`. Build `dashboard/` from them.
-Blocked / questions: needs API keys for two cache-capable providers.
-
-## D: product and pitch (no Claude)
+## D: product and pitch (Ronak, no Claude)
 
 Next:
 - Ask on Discord: one or two submissions allowed? How does Nov 29 judging run?
-- Follow `bench/README.md` setup on your own laptop from scratch; note every snag here.
+- Open the website once Pages is on; try the demo on your phone; note anything confusing.
 - Review `docs/PITCH.md` and `docs/JUDGE_QA.md`; rehearse.
-- Record the demo video from `docs/DEMO_SCRIPT.md`.
+- Record the demo video from `docs/DEMO_SCRIPT.md` (use the website demo for the visuals).
 Blocked / questions: none.
