@@ -42,10 +42,12 @@ Failover reuses Bifrost's existing affinity. Details: [docs/DESIGN.md](docs/DESI
 ## Setup
 
 ```bash
-git clone https://github.com/akashjhajharia123-ui/bifrost.git bifrost && cd bifrost && git switch feat/sticky-weighted-targets
+git clone https://github.com/akashjhajharia123-ui/stickyroute.git && cd stickyroute && bash setup.sh
 ```
 
-Then follow [bench/README.md](bench/README.md) to build the gateway and run the benchmark.
+`setup.sh` clones our Bifrost fork into `bifrost/` on `feat/sticky-weighted-targets`, prepares the
+Go workspace and runs the sticky tests. Team roles and the full onboarding: [docs/TEAM.md](docs/TEAM.md).
+To build the gateway and run the benchmark: [bench/README.md](bench/README.md).
 
 ## Tests (in `bifrost/`)
 
