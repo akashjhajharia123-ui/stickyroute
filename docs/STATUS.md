@@ -9,7 +9,8 @@ Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
 - [x] Feature implemented and committed in `bifrost/` on branch `feat/sticky-weighted-targets` (commit `117b7b7`)
 - [x] Go tests: routing plugin, configstore, HTTP handlers all pass
 - [x] UI: switch added; i18n check passes; UI build + typecheck 0 errors
-- [ ] Fork maximhq/bifrost on GitHub and push the branch (human: needs a GitHub account)
+- [x] Fork pushed: https://github.com/akashjhajharia123-ui/bifrost/tree/feat/sticky-weighted-targets
+- [x] Team repo: https://github.com/akashjhajharia123-ui/stickyroute (add teammates as collaborators)
 - [ ] Comment on #5409 that the team is working on it (human)
 - [x] Routing proof on the real gateway (no keys): 974/1000 conversations switched provider
       today vs 0/1000 with sticky (`bench/results/routing-proof.json`)
