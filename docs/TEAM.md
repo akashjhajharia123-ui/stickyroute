@@ -2,10 +2,10 @@
 
 | Person | GitHub | Role | Claude |
 |---|---|---|---|
-| Akash | akashjhajharia123-ui | [role] | Yes |
-| [name] | ronakpooniaiitb | [role] | [yes/no] |
-| [name] | Rahulchoudhary98 | [role] | [yes/no] |
-| [name] | Kanishkkumar-Git | [role] | [yes/no] |
+| Akash | akashjhajharia123-ui | **A** core and lead (code, PR #9908, deck, submission) | Yes |
+| Rahul | Rahulchoudhary98 | **B** tests and review | Yes |
+| Kanishk | Kanishkkumar-Git | **C** real-provider benchmark and dashboard | Yes |
+| Ronak | ronakpooniaiitb | **D** Discord, demo video, setup test, judge Q&A practice | No |
 
 Roles: **A** core · **B** tests and review · **C** benchmark and dashboard · **D** pitch, demo, Discord (no Claude needed).
 Details per role: `docs/STATUS.md`. Opening prompts: `docs/TEAM_PROMPTS.md`.
