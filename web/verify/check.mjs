@@ -1,9 +1,9 @@
 // Checks that site/sticky.js picks exactly what the Go code in engine.go picks.
 // go-vectors.json was written by Go's selectStickyWeightedTarget for 8,000 keys over four
 // target sets (70/30, 50/30/20 with a key pin, all-zero weights, negative/zero/positive mix).
-// Run from the repo root:  node site/verify/check.mjs
+// Run from the repo root:  node web/verify/check.mjs
 import { readFileSync } from "node:fs";
-import { selectSticky, stickyHashUnit, targetIdentity } from "../sticky.js";
+import { selectSticky, stickyHashUnit, targetIdentity } from "../src/lib/sticky.js";
 
 const UNIT_TOLERANCE = 0; // the hash maps to the same float64 in both languages
 

@@ -1,7 +1,7 @@
 // A line-for-line JavaScript port of the target selection in
 // bifrost/plugins/routing/rules/engine.go (selectStickyWeightedTarget and selectWeightedTarget),
 // so the website simulates exactly what the gateway does. Verified against the Go code by
-// site/verify (see README in that folder).
+// web/verify/check.mjs.
 
 const MASK64 = (1n << 64n) - 1n;
 const FNV_OFFSET = 0xcbf29ce484222325n;
