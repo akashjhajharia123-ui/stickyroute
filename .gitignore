@@ -10,6 +10,9 @@
 /bench/*/*.db-wal
 /bench/*/logs/
 
+# npm installs (shadcn CLI for the React Bits registry, web build)
+node_modules/
+
 # Local secrets and noise
 .env
 .env.*
