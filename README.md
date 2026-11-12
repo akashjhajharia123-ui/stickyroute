@@ -33,7 +33,7 @@ Failover reuses Bifrost's existing affinity. Details: [docs/DESIGN.md](docs/DESI
 
 | Path | What |
 |---|---|
-| `bifrost/` | Not in this repo: clone our fork here (branch `feat/sticky-weighted-targets`). |
+| `bifrost/` | Not in this repo: clone [our fork](https://github.com/akashjhajharia123-ui/bifrost/tree/feat/sticky-weighted-targets) here (branch `feat/sticky-weighted-targets`). |
 | `bench/` | Benchmark harness, fake upstreams, configs, committed results. [bench/README.md](bench/README.md) |
 | `dashboard/` | Results page. Serve the repo root (`python3 -m http.server`) and open `/dashboard/`. |
 | `docs/` | Brief, design, interfaces, decisions, status, pitch, demo script, judge Q&A, PR draft. |
@@ -42,7 +42,7 @@ Failover reuses Bifrost's existing affinity. Details: [docs/DESIGN.md](docs/DESI
 ## Setup
 
 ```bash
-git clone <our-fork-url> bifrost && cd bifrost && git switch feat/sticky-weighted-targets
+git clone https://github.com/akashjhajharia123-ui/bifrost.git bifrost && cd bifrost && git switch feat/sticky-weighted-targets
 ```
 
 Then follow [bench/README.md](bench/README.md) to build the gateway and run the benchmark.
