@@ -1,5 +1,6 @@
 import FadeContent from '../components/rb/FadeContent.jsx'
 import SpotlightCard from '../components/rb/SpotlightCard.jsx'
+import Tilt3D from '../components/Tilt3D.jsx'
 
 const PROBLEMS = [
   { title: 'Conversations break', body: 'Providers format messages and tool calls differently. Switching mid-thread causes errors and lost context.' },
@@ -22,10 +23,12 @@ export default function Problem() {
         <div className="cards">
           {PROBLEMS.map((p, i) => (
             <FadeContent key={p.title} delay={i * 0.12} duration={0.7}>
-              <SpotlightCard className="card" spotlightColor="rgba(127, 176, 255, 0.22)">
-                <h3>{p.title}</h3>
-                <p>{p.body}</p>
-              </SpotlightCard>
+              <Tilt3D>
+                <SpotlightCard className="card" spotlightColor="rgba(127, 176, 255, 0.22)">
+                  <h3>{p.title}</h3>
+                  <p>{p.body}</p>
+                </SpotlightCard>
+              </Tilt3D>
             </FadeContent>
           ))}
         </div>

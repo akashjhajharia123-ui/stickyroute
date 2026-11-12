@@ -1,4 +1,5 @@
 import './App.css'
+import Space3D from './components/Space3D.jsx'
 import Demo from './sections/Demo.jsx'
 import Hero from './sections/Hero.jsx'
 import HowItWorks from './sections/HowItWorks.jsx'
@@ -41,6 +42,7 @@ function Footer() {
 export default function App() {
   return (
     <>
+      <Space3D />
       <Nav />
       <main>
         <Hero />

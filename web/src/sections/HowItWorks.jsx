@@ -1,5 +1,6 @@
 import FadeContent from '../components/rb/FadeContent.jsx'
 import SpotlightCard from '../components/rb/SpotlightCard.jsx'
+import Tilt3D from '../components/Tilt3D.jsx'
 
 const STEPS = [
   { title: 'Turn it on per rule', body: <>One field on a routing rule, off by default: <code>"sticky_sessions": true</code>. From the dashboard, the API or <code>config.json</code>.</> },
@@ -31,20 +32,22 @@ export default function HowItWorks() {
         <ol className="steps">
           {STEPS.map((s, i) => (
             <FadeContent key={s.title} delay={i * 0.1} duration={0.7}>
-              <li>
+              <Tilt3D as="li">
                 <span className="step-num">{i + 1}</span>
                 <h3>{s.title}</h3>
                 <p>{s.body}</p>
-              </li>
+              </Tilt3D>
             </FadeContent>
           ))}
         </ol>
         <div className="cards">
           {PROPERTIES.map(p => (
-            <SpotlightCard key={p.title} className="card" spotlightColor="rgba(240, 149, 79, 0.2)">
-              <h3>{p.title}</h3>
-              <p>{p.body}</p>
-            </SpotlightCard>
+            <Tilt3D key={p.title}>
+              <SpotlightCard className="card" spotlightColor="rgba(240, 149, 79, 0.2)">
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+              </SpotlightCard>
+            </Tilt3D>
           ))}
         </div>
 

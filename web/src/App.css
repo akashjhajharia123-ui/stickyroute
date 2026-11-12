@@ -1,7 +1,7 @@
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
 @media (min-width: 720px) { .wrap { padding: 0 32px; } }
 section { padding: 88px 0; position: relative; }
-.band { background: var(--bg-alt); }
+.band { background: rgba(16, 20, 31, 0.62); }
 h2 { font-size: clamp(30px, 4.2vw, 44px); margin-bottom: 14px; letter-spacing: -0.01em; }
 h3 { font-size: 20px; margin-bottom: 6px; }
 .sub-title { font-size: clamp(22px, 3vw, 28px); margin: 56px 0 16px; }
@@ -87,3 +87,34 @@ h3 { font-size: 20px; margin-bottom: 6px; }
 
 footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--muted); font-size: 15px; }
 .footer-inner { display: grid; gap: 6px; }
+
+/* ---- 3D layer ---- */
+
+/* the starfield sits behind everything; content scrolls over it */
+.space3d { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.space3d > * { position: absolute; inset: 0; animation: hero-fade 2s ease-out both; }
+main, footer { position: relative; z-index: 1; }
+footer { background: rgba(11, 14, 22, 0.7); }
+
+/* cards, tiles and panels tilt toward the cursor and lift off the page */
+.tilt3d {
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(var(--lift, 0px));
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+  will-change: transform;
+}
+.tilt3d:hover { box-shadow: 0 26px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(127, 176, 255, 0.22); }
+.tilt3d h3, .tilt3d dd, .tilt3d .step-num { transform: translateZ(28px); }
+.panel, .steps li, .kpi { background: rgba(21, 27, 41, 0.84); }
+
+/* the conversation grids lie back like glowing floors. Panels render flat (no depth sorting),
+   otherwise the tilted grid would sink behind the panel's own background and disappear. */
+.panel.tilt3d { transform-style: flat; }
+.panel .grid { transform: perspective(900px) rotateX(18deg); transform-origin: 50% 100%; }
+.cell.a { box-shadow: 0 0 6px rgba(79, 141, 245, 0.55); }
+.cell.b { box-shadow: 0 0 6px rgba(240, 149, 79, 0.5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt3d { transition: none; }
+  .space3d > * { animation: none; }
+}
