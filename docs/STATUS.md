@@ -16,7 +16,7 @@ Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
 - [x] Routing proof on the real gateway: 974/1000 conversations switched today vs 0/1000 sticky
 - [x] Website with live simulator in `site/` (JS port matches Go on 8,000/8,000 picks), on branch `gh-pages`
 - [ ] **Enable GitHub Pages** (human: repo Settings → Pages → branch `gh-pages`, folder `/`) → https://akashjhajharia123-ui.github.io/stickyroute/
-- [ ] Reply to CodeRabbit on PR #9908 (drafts ready; human approves posting)
+- [x] Replied to all 5 CodeRabbit comments on PR #9908 (4 fixed in `594b5b6`, harness case promised as follow-up)
 - [ ] Cache/cost benchmark with real providers (free route: Gemini + Groq keys needed)
 - [ ] Deck (cover done in the Slides artifact; to finish, then Canva), demo video
 - [ ] Mark PR #9908 "Ready for review"
