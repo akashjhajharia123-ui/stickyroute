@@ -60,6 +60,34 @@ the only difference is `sticky_sessions`. Core session affinity is on in both (B
 The sticky assignments were cross-checked with an independent Python implementation of the
 hash (200/200 match), and over 100,000 sessions in the same ID format the split is 70.08%.
 
+## 1b. Real provider, free tier: Gemini (routing confirmed, cache comparison NOT valid)
+
+`results/free-gemini-70-30.json`, 2026-11-12: real Gemini free-tier traffic through the gateway
+built from `594b5b6`, 10 conversations × 6 turns per mode, a 70/30 rule across
+`gemini-3.1-flash-lite` / `gemini-3.1-flash-lite-preview`, each conversation with its own
+~3k-token context (`--session-context 12000`), 120/120 requests succeeded.
+
+| Mode | Conversations that switched model | Switches per conversation | Errors |
+|---|---|---|---|
+| random | 9 / 10 | 2.0 | 0 |
+| sticky | 0 / 10 | 0 | 0 |
+
+**Routing result: valid.** With real provider traffic, sticky sessions kept every conversation
+on one model; today's behaviour moved 9 of 10.
+
+**Cache result: do not quote.** Random mode reported 67.4% cached input tokens and sticky 63.7%,
+but the test cannot show a difference: the two Gemini models share one implicit cache. In random
+mode, conversation `...-0000` sent turn 1 to the preview model and turn 2 to the lite model, and
+the lite model already reported 8,157 cached tokens of that conversation's unique context. Real
+providers (for example Anthropic vs OpenAI) keep separate caches, so a valid cache measurement
+needs two providers whose caches are separate and which both report cached tokens. The free
+options tried did not qualify: Groq reported no cached tokens and hit its free limit after two
+calls; `gemini-3.5-flash` reported 0 cached; `gemini-3.8-flash` and `gemini-flash-latest` were
+overloaded. Use section 2 (paid keys, a few dollars) for a valid cache number.
+
+`bench/free/start-gateway.sh` starts the gateway for this setup, reading the keys without
+echoing or storing them.
+
 ## 2. Real providers (cache and cost)
 
 1. Open `real/config.json` and replace both `VERIFY-...` model names with current, cheap
