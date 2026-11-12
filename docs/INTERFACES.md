@@ -4,7 +4,10 @@ These let A, B, C and D work in parallel. Changing one needs a line in `DECISION
 
 ## 1. Routing rule (what operators configure)
 
-API: `POST /api/governance/routing-rules` (create), `PUT .../{id}` (update). Same shape in `config.json`.
+API: `POST /api/routing/rules` (create), `PUT /api/routing/rules/{rule_id}` (update); the older
+`/api/governance/routing-rules` paths are aliases. The management API needs dashboard auth or a
+`setup_token`; for local benchmarks, put rules in `config.json` under `governance.routing_rules`
+instead (see `bench/routing-proof/config.json`).
 
 ```json
 {
@@ -20,9 +23,7 @@ API: `POST /api/governance/routing-rules` (create), `PUT .../{id}` (update). Sam
 }
 ```
 
-Track C must confirm the exact endpoint path and current model names against the running
-Bifrost before relying on this (the API path above is from the handler code; check
-`transports/bifrost-http/handlers/routing.go` route registration).
+Model names in examples are placeholders; use current names from each provider.
 
 ## 2. Session ID (what clients send)
 

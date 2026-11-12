@@ -11,8 +11,12 @@ Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
 - [x] UI: switch added; i18n check passes; UI build + typecheck 0 errors
 - [ ] Fork maximhq/bifrost on GitHub and push the branch (human: needs a GitHub account)
 - [ ] Comment on #5409 that the team is working on it (human)
-- [ ] Benchmark with real providers (needs API keys in env vars)
-- [ ] Dashboard from real results
+- [x] Routing proof on the real gateway (no keys): 974/1000 conversations switched provider
+      today vs 0/1000 with sticky (`bench/results/routing-proof.json`)
+- [x] Dashboard (`dashboard/index.html`) renders the routing proof
+- [x] Drafts for D: `docs/PITCH.md`, `docs/DEMO_SCRIPT.md`, `docs/JUDGE_QA.md`, `docs/PR.md`
+- [ ] Benchmark with real providers (needs API keys in env vars; set model names in `bench/real/config.json`)
+- [ ] Dashboard view of the real-provider run
 - [ ] README, deck, demo video, judge Q&A
 - [ ] Upstream PR opened (human), linked to #5409
 - [ ] Hackathon submission (human)
