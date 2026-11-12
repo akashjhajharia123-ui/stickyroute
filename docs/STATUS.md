@@ -11,7 +11,8 @@ Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
 - [x] UI: switch added; i18n check passes; UI build + typecheck 0 errors
 - [x] Fork pushed: https://github.com/akashjhajharia123-ui/bifrost/tree/feat/sticky-weighted-targets
 - [x] Team repo: https://github.com/akashjhajharia123-ui/stickyroute (add teammates as collaborators)
-- [ ] Comment on #5409 that the team is working on it (human)
+- [x] Commented on #5409: https://github.com/maximhq/bifrost/issues/5409#issuecomment-6825112970
+- [x] Draft PR opened: https://github.com/maximhq/bifrost/pull/9908 (mark ready after B's review)
 - [x] Routing proof on the real gateway (no keys): 974/1000 conversations switched provider
       today vs 0/1000 with sticky (`bench/results/routing-proof.json`)
 - [x] Dashboard (`dashboard/index.html`) renders the routing proof
@@ -19,7 +20,7 @@ Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
 - [ ] Benchmark with real providers (needs API keys in env vars; set model names in `bench/real/config.json`)
 - [ ] Dashboard view of the real-provider run
 - [ ] README, deck, demo video, judge Q&A
-- [ ] Upstream PR opened (human), linked to #5409
+- [ ] Upstream PR #9908 marked ready for review (after B's review)
 - [ ] Hackathon submission (human)
 
 ## A: core (Claude)
