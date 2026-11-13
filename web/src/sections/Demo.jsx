@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import ProviderGrid from '../components/ProviderGrid.jsx'
-import Tilt3D from '../components/Tilt3D.jsx'
 import { buildTargets, simulate, summarise } from '../lib/simulate.js'
 
 const STEP_MS = 70
@@ -93,16 +92,16 @@ export default function Demo() {
         </div>
 
         <div className="panels">
-          <Tilt3D as="figure" className="panel" max={5}>
+          <figure className="panel">
             <figcaption><h3>Bifrost today</h3><p>A new weighted draw on every message.</p></figcaption>
             <ProviderGrid rows={reveal(run.random, shown)} label="Provider per message, Bifrost today" />
             <Stats rows={run.random} done={done} />
-          </Tilt3D>
-          <Tilt3D as="figure" className="panel" max={5}>
+          </figure>
+          <figure className="panel">
             <figcaption><h3>With <code>sticky_sessions</code></h3><p>One pick per conversation, from its session ID.</p></figcaption>
             <ProviderGrid rows={reveal(run.sticky, shown)} label="Provider per message, with sticky sessions" />
             <Stats rows={run.sticky} done={done} />
-          </Tilt3D>
+          </figure>
         </div>
         <p className="note" role="status">
           {done

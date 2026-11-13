@@ -30,13 +30,13 @@ function ModeGrids({ data, legend }) {
           const m = byMode[mode]
           const title = mode === 'random' ? 'Bifrost today' : 'With sticky_sessions'
           return (
-            <Tilt3D as="figure" className="panel" key={mode} max={5}>
+            <figure className="panel" key={mode}>
               <figcaption>
                 <h3>{title}</h3>
                 <p>{m.summary.sessions_with_any_switch} of {m.sessions_total} conversations switched · first {Math.min(GRID_ROWS, m.sample.length)} shown</p>
               </figcaption>
               <ProviderGrid rows={sampleToRows(m.sample.slice(0, GRID_ROWS))} label={`${title}: who answered each message`} />
-            </Tilt3D>
+            </figure>
           )
         })}
       </div>
