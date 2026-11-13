@@ -20,7 +20,9 @@ Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
 - [x] Website live: https://akashjhajharia123-ui.github.io/stickyroute/
 - [x] Replied to all 5 CodeRabbit comments on PR #9908 (4 fixed in `594b5b6`, harness case promised as follow-up)
 - [ ] Cache/cost benchmark with real providers (free route: Gemini + Groq keys needed)
-- [ ] Deck (cover done in the Slides artifact; to finish, then Canva), demo video
+- [x] Deck generated in Canva (10 slides): https://canva.link/ol90m3gd4ep1now. Before submitting, check
+      every number against `docs/PITCH.md` (AI generation can reword text) and add the team name.
+- [ ] Demo video
 - [ ] Mark PR #9908 "Ready for review"
 - [ ] Hackathon submission (human)
 
