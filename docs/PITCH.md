@@ -5,7 +5,7 @@ once it exists; do not present them before then.
 
 ## 1. Title
 **StickyRoute: session-sticky weighted routing for Bifrost**
-Team name · Geek Room Global AI Hackathon · Bifrost track, Problem 04
+Team Matrixx · Geek Room Global AI Hackathon · Bifrost track, Problem 04
 Upstream issue: maximhq/bifrost#5409
 
 ## 2. The problem

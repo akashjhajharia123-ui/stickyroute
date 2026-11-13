@@ -16,3 +16,7 @@ Append only. Newest at the bottom. Format: date, decision, why, who.
   migration is needed and upgrades rewrite no stored rule.
 - 2026-11-12. **Benchmark and dashboard live outside the upstream fork** (`bench/`, `dashboard/`),
   so the upstream PR contains only the feature.
+
+## 2026-11-13: Team name
+
+The team is **Team Matrixx** (Akash, Rahul, Kanishk, Ronak). Use this name on the deck, the demo video and the hackathon submission.
