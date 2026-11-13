@@ -1,4 +1,4 @@
-# Team
+# Team Matrixx
 
 | Person | GitHub | Role | Claude |
 |---|---|---|---|

@@ -20,8 +20,11 @@ Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
 - [x] Website live: https://akashjhajharia123-ui.github.io/stickyroute/
 - [x] Replied to all 5 CodeRabbit comments on PR #9908 (4 fixed in `594b5b6`, harness case promised as follow-up)
 - [ ] Cache/cost benchmark with real providers (free route: Gemini + Groq keys needed)
-- [x] Deck generated in Canva (10 slides): https://canva.link/ol90m3gd4ep1now. Before submitting, check
-      every number against `docs/PITCH.md` (AI generation can reword text) and add the team name.
+- [x] Deck (2026-11-13): "StickyRoute Pitch Deck (Pro)", made with Canva AI in the Pro account, numbers checked
+      against the results files and `sticky_sessions` spelling fixed on slides 4, 5 and 7:
+      https://www.canva.com/design/DAHaybPybi8/edit. Team Matrixx and all four members on slides 1 and 10.
+      Superseded: "StickyRoute Pitch Deck (final)" (plain pptx import, source `deck/StickyRoute-Pitch.pptx`)
+      and the older connector-generated deck.
 - [ ] Demo video
 - [ ] Mark PR #9908 "Ready for review"
 - [ ] Hackathon submission (human)
