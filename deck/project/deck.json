@@ -1,0 +1,20 @@
+{
+  "v": 4,
+  "createdOnFiles": {"v": 1, "at": "2026-11-12T14:05:00Z"},
+  "lists": "css",
+  "title": "StickyRoute: Session-Sticky Routing for Bifrost",
+  "cover": "cover",
+  "order": ["cover", "problem", "deeper", "measured", "fix", "how", "failover", "quality", "next", "close"],
+  "sections": {
+    "s1": {"description": "The problem: weighted routing re-rolls the provider on every turn of a conversation.", "start": "cover"},
+    "s2": {"description": "The evidence: measured on a real Bifrost gateway.", "start": "measured"},
+    "s3": {"description": "The fix: one opt-in flag and weighted rendezvous hashing.", "start": "fix"},
+    "s4": {"description": "Delivery: upstream-quality change, what comes next.", "start": "quality"}
+  },
+  "faces": {
+    "space-grotesk": {"family": "Space Grotesk", "href": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap"},
+    "ibm-plex-sans": {"family": "IBM Plex Sans", "href": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap"},
+    "jetbrains-mono": {"family": "JetBrains Mono", "href": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap"}
+  },
+  "designSystems": []
+}
