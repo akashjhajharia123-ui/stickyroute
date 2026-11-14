@@ -1,5 +1,7 @@
 # Demo video script (about 3 minutes)
 
+Voiceover text for ElevenLabs: `docs/VOICEOVER.md`.
+
 Record at 1080p. Large terminal font. Close notifications. Rehearse twice first.
 
 | Time | Screen | Say |
