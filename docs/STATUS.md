@@ -26,7 +26,11 @@ Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
       (source `deck/StickyRoute-Pitch-v2.pptx`, PDF export `deck/StickyRoute-Pitch-v2.pdf`).
       Superseded decks moved to Canva Trash (recoverable 30 days). Still to delete by hand: the 20-page
       connector-account deck "StickyRoute Pitch Deck" (DAHayHcJpt8), which lives in a different Canva account.
-- [ ] Demo video
+- [x] Demo video (2026-11-14): `video/StickyRoute-demo.mp4`, 2 min 11 s, 1080p, ElevenLabs voiceover from
+      `docs/VOICEOVER.md` (clips in `video/voice/`). Visuals: deck slides, live website, issue #5409, dashboard,
+      config/engine/test cards. Numbers only from `routing-proof.json` and `free-gemini-70-30.json`.
+      Note: page 1 of `deck/StickyRoute-Pitch-v2.pdf` carries stray hackathon-announcement text over the title;
+      the video uses a clean title card. Check slide 1 of the Canva deck before submitting.
 - [x] PR #9908 marked "Ready for review" (2026-11-14), after merging upstream `dev` into the branch
       (merge `2f33fcd3e`, 2 conflicts resolved: migrations list, weighted-target picker; routing, configstore
       and handler tests pass; still 28 files)
