@@ -27,7 +27,9 @@ Deadline: **2026-11-15 23:59** (submission). Judging: 2026-11-29.
       Superseded decks moved to Canva Trash (recoverable 30 days). Still to delete by hand: the 20-page
       connector-account deck "StickyRoute Pitch Deck" (DAHayHcJpt8), which lives in a different Canva account.
 - [ ] Demo video
-- [ ] Mark PR #9908 "Ready for review"
+- [x] PR #9908 marked "Ready for review" (2026-11-14), after merging upstream `dev` into the branch
+      (merge `2f33fcd3e`, 2 conflicts resolved: migrations list, weighted-target picker; routing, configstore
+      and handler tests pass; still 28 files)
 - [ ] Hackathon submission (human)
 
 ## A: core (Akash + Claude)
